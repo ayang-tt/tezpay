@@ -1,0 +1,21 @@
+{ parameter (pair string timestamp) ;
+  storage address ;
+  code { UNPAIR ;
+         CDR ;
+         NOW ;
+         COMPARE ;
+         GT ;
+         IF { DROP ; PUSH string "ERROR: payment expired" ; FAILWITH }
+            { AMOUNT ;
+              DUP 2 ;
+              CONTRACT unit ;
+              IF_NONE { PUSH string "ERROR: invalid payee address" ; FAILWITH } {} ;
+              SWAP ;
+              UNIT ;
+              TRANSFER_TOKENS ;
+              SWAP ;
+              NIL operation ;
+              DIG 2 ;
+              CONS ;
+              PAIR } } }
+
